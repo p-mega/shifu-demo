@@ -5,6 +5,4 @@ metadata:
 spec:
   containers:
     - name: shifu-demo
-      image: shifu-demo
-      ports:
-        - containerPort: 0
+      image: 1454579997/shifu-demo:1.0

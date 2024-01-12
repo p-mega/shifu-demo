@@ -1,12 +1,16 @@
-# 第一步编译go文件
 FROM golang:alpine AS builder
-WORKDIR /build
-ADD go.mod .
-COPY . .
-RUN go build -o shifu-demo main.go
 
-# 第二步部生成镜像
+# 禁用CGO，减小镜像体积
+ENV CGO_ENABLED 0
+# go mod 镜像源修改
+ENV GOPROXY https://goproxy.cn,direct
+
+WORKDIR /build
+COPY . .
+RUN go build -ldflags="-s -w" -o shifu-demo main.go
+
+
 FROM alpine
 WORKDIR /build
-COPY --from=builder /build/hello /build/hello
+COPY --from=builder /build/shifu-demo /build/shifu-demo
 CMD ["./shifu-demo"]
